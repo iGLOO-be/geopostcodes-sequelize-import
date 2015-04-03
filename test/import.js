@@ -3,13 +3,10 @@ var path = require('path');
 var chai = require('chai');
 var expect = chai.expect;
 
-var testConfig = {
-  database: 'geopostcodes-sequelize-import',
-  user: 'root',
-  password: ''
-};
+var testConfig = require('./config/config');
+var csvStream = require('./fixtures/csv-stream');
 
-describe('Import Factory', function () {
+describe(':::: Import Factory ::::', function () {
   var sequelize;
 
   before(function () {
@@ -39,6 +36,6 @@ describe('Import Factory', function () {
     var factory = require('../index');
     var importer = factory(sequelize.model('Address'), {});
 
-    importer.syncStream({}, done);
+    importer.syncStream(csvStream(), done);
   });
 });
