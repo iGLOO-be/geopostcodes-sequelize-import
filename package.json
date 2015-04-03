@@ -16,7 +16,9 @@
   "bugs": {
     "url": "https://github.com/Natsuke/geoposition-import/issues"
   },
-  "dependencies": {},
+  "dependencies": {
+    "q": "^1.2.0"
+  },
   "devDependencies": {
     "chai": "~1.10.0",
     "csv": "^0.4.1",

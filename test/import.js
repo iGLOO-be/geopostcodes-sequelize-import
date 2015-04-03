@@ -35,6 +35,7 @@ describe(':::: Import Factory ::::', function () {
   it('Can do import', function (done) {
     var factory = require('../index');
     var importer = factory(sequelize.model('Address'), {});
+    var Address = sequelize.model('Address', {});
 
     importer.syncStream(csvStream(), done);
   });

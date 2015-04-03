@@ -5,7 +5,7 @@ var expect = chai.expect;
 
 var config = require('./config/config');
 
-describe(':::: Value Query ::::', function () {
+describe(':::: Model Testing ::::', function () {
   var sequelize;
 
   before(function () {
@@ -47,19 +47,41 @@ describe(':::: Value Query ::::', function () {
     _create(Address)
       .then(function (model) {
         expect(model.get('cityName')).equal('Bruxelles');
+        expect(model.get('streetName')).equal('Grand Rue');
+        expect(model.get('postCode')).equal(1000);
         done();
       }, function (err) {
         done(err);
       });
+  });
 
+  it('Can delete model', function (done) {
+    var Address = sequelize.model('Address', {});
+
+    _create(Address)
+      .then(function(model) {
+        Address.destroy({
+          where: {
+            cityName: 'Bruxelles'
+          }
+        })
+        .then(function () {
+          done();
+        }, function (err) {
+          done(err);
+        });
+      }, function (err) {
+        done(err);
+      });
   });
 });
 
 var _create = function (model) {
   return model
           .create({
+            id: 20003562,
             cityName: 'Bruxelles',
             streetName: 'Grand Rue',
-            streetNumber: 3
+            postCode: 1000
           });
 };
