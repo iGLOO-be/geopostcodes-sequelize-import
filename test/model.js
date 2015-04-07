@@ -20,7 +20,7 @@ describe(':::: Model Testing ::::', function () {
 
   beforeEach(function (done) {
     sequelize
-      .sync({force: true})
+      .sync({ force: true })
       .nodeify(done);
   });
 
@@ -46,6 +46,7 @@ describe(':::: Model Testing ::::', function () {
 
     _create(Address)
       .then(function (model) {
+        expect(model.get('id')).equal(20003562);
         expect(model.get('cityName')).equal('Bruxelles');
         expect(model.get('streetName')).equal('Grand Rue');
         expect(model.get('postCode')).equal(1000);
@@ -66,7 +67,14 @@ describe(':::: Model Testing ::::', function () {
           }
         })
         .then(function () {
-          done();
+          Address
+            .findAndCountAll()
+            .then(function (result) {
+              expect(result.count).equal(0);
+              done();
+            }, function (err) {
+              done(err);
+            });
         }, function (err) {
           done(err);
         });

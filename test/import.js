@@ -37,6 +37,19 @@ describe(':::: Import Factory ::::', function () {
     var importer = factory(sequelize.model('Address'), {});
     var Address = sequelize.model('Address', {});
 
-    importer.syncStream(csvStream(), done);
+    _create(Address)
+      .then(function () {
+        importer.syncStream(csvStream(), done);
+      });
   });
 });
+
+var _create = function (model) {
+  return model
+          .create({
+            id: 20003562,
+            cityName: 'Bruxelles',
+            streetName: 'Grand Rue',
+            postCode: 1000
+          });
+};

@@ -13,18 +13,15 @@ module.exports = function importerFactory (sequelizeDAO) {
           auto_parse: true,
           columns: true
         }))
-        .pipe(csv.transform(function (record) {
-          return record;
-        }))
         .on('data', function (chunk) {
           data.push(chunk);
         })
         .on('end', function () {
           q.all(_createAll(sequelizeDAO, data))
             .then(function () {
-              done();
+              return done();
             }, function (err) {
-              done(err);
+              return done(err);
             });
         });
     }
@@ -43,9 +40,30 @@ var _create = function (sequelizeDAO, jsonData) {
 
 var _createAll = function (sequelizeDAO, jsonArray) {
   var promises = [];
+
   jsonArray
     .forEach(function (address) {
       promises.push(_create(sequelizeDAO, address));
     });
+  _deleteUnused(sequelizeDAO, jsonArray);
+
   return promises;
+};
+
+var _deleteUnused = function (sequelizeDAO, jsonArray) {
+  var id = [];
+
+  jsonArray
+    .forEach(function (address) {
+      id.push(address.id);
+    });
+
+  return sequelizeDAO
+          .destroy({
+            where: {
+              $not: [
+                { id: id }
+              ]
+            }
+          });
 };
