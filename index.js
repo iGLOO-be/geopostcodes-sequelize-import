@@ -13,6 +13,14 @@ module.exports = function importerFactory (sequelizeDAO) {
           auto_parse: true,
           columns: true
         }))
+        .pipe(csv.transform(function (record) {
+          return {
+            id: record.id,
+            city: record.region3,
+            street: record.street,
+            postcode: record.postcode
+          }
+        }))
         .on('data', function (chunk) {
           data.push(chunk);
         })
@@ -32,7 +40,7 @@ var _create = function (sequelizeDAO, jsonData) {
   return sequelizeDAO
           .upsert({
             id: jsonData.id,
-            cityName: jsonData.region3,
+            cityName: jsonData.city,
             streetName: jsonData.street,
             postCode: jsonData.postcode
           });

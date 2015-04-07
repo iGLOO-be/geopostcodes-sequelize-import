@@ -1,9 +1,9 @@
-var Sequelize  = require('sequelize');
+var Sequelize = require('sequelize');
 var path = require('path');
 var chai = require('chai');
 var expect = chai.expect;
 
-var config = require('./config/config');
+var config = require('./fixtures/config');
 
 describe(':::: Model Testing ::::', function () {
   var sequelize;

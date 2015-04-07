@@ -17,11 +17,11 @@
     "url": "https://github.com/Natsuke/geoposition-import/issues"
   },
   "dependencies": {
-    "q": "^1.2.0"
+    "q": "^1.2.0",
+    "csv": "^0.4.1"
   },
   "devDependencies": {
     "chai": "~1.10.0",
-    "csv": "^0.4.1",
     "grunt": "~0.4.1",
     "grunt-cli": "~0.1.9",
     "grunt-complexity": "~0.1.3",
