@@ -1,10 +1,10 @@
 var Sequelize = require('sequelize');
+var fs = require('fs');
 var path = require('path');
 var chai = require('chai');
 var expect = chai.expect;
 
-var testConfig = require('./config/config');
-var csvStream = require('./fixtures/csv-stream');
+var testConfig = require('./fixtures/config');
 
 describe(':::: Import Factory ::::', function () {
   var sequelize;
@@ -39,7 +39,10 @@ describe(':::: Import Factory ::::', function () {
 
     _create(Address)
       .then(function () {
-        importer.syncStream(csvStream(), done);
+        importer.syncStream(
+          fs.createReadStream(path.join(__dirname, '/fixtures/csv/sample.csv')),
+          done
+        );
       });
   });
 });
