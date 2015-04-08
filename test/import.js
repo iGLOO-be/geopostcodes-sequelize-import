@@ -1,3 +1,5 @@
+/* globals describe, before, beforeEach, it */
+'use strict';
 var Sequelize = require('sequelize');
 var fs = require('fs');
 var path = require('path');
@@ -27,8 +29,8 @@ describe(':::: Import Factory ::::', function () {
 
   it('Can create importer', function () {
     var factory = require('../index');
+    var importer = factory(sequelize.model('Address'), {});
 
-    importer = factory(sequelize.model('Address'), {});
     expect(importer.syncStream).to.be.a('function');
   });
 

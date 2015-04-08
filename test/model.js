@@ -1,3 +1,5 @@
+/* globals describe, before, beforeEach, it */
+'use strict';
 var Sequelize = require('sequelize');
 var path = require('path');
 var chai = require('chai');

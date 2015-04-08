@@ -1,4 +1,5 @@
 // Generated on 2015-04-02 using generator-nodejs 2.1.0
+'use strict';
 module.exports = function (grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
