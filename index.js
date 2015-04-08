@@ -2,11 +2,14 @@
 var csv = require('csv');
 var q = require('q');
 
+var sequelizeCRUD = require('./lib/sequelizeCRUD');
+
 module.exports = function importerFactory (sequelizeDAO) {
-  var data = [];
 
   return {
     syncStream: function (stream, done) {
+      var data = [];
+
       stream
         .pipe(csv.parse({
           delimiter: ';',
@@ -26,7 +29,7 @@ module.exports = function importerFactory (sequelizeDAO) {
           data.push(chunk);
         })
         .on('end', function () {
-          q.all(_createAll(sequelizeDAO, data))
+          q.all(sequelizeCRUD(sequelizeDAO, data).createAll())
             .then(function () {
               done();
             }, function (err) {
@@ -35,45 +38,4 @@ module.exports = function importerFactory (sequelizeDAO) {
         });
     }
   };
-};
-
-var _create = function (sequelizeDAO, jsonData) {
-
-  return sequelizeDAO
-          .upsert({
-            id: jsonData.id,
-            cityName: jsonData.city,
-            streetName: jsonData.street,
-            postCode: jsonData.postcode
-          });
-};
-
-var _createAll = function (sequelizeDAO, jsonArray) {
-  var promises = [];
-
-  jsonArray
-    .forEach(function (address) {
-      promises.push(_create(sequelizeDAO, address));
-    });
-  _deleteUnused(sequelizeDAO, jsonArray);
-
-  return promises;
-};
-
-var _deleteUnused = function (sequelizeDAO, jsonArray) {
-  var id = [];
-
-  jsonArray
-    .forEach(function (address) {
-      id.push(address.id);
-    });
-
-  return sequelizeDAO
-          .destroy({
-            where: {
-              $not: [
-                { id: id }
-              ]
-            }
-          });
 };
