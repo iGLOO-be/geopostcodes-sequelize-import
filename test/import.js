@@ -4,16 +4,16 @@ var path = require('path');
 var chai = require('chai');
 var expect = chai.expect;
 
-var testConfig = require('./fixtures/config');
+var config = require('./fixtures/config');
 
 describe(':::: Import Factory ::::', function () {
   var sequelize;
 
   before(function () {
     sequelize = new Sequelize(
-      testConfig.database,
-      testConfig.user,
-      testConfig.password
+      config.database,
+      config.user,
+      config.password
     );
 
     sequelize.import(path.join(__dirname, '../lib/model'));
@@ -27,8 +27,8 @@ describe(':::: Import Factory ::::', function () {
 
   it('Can create importer', function () {
     var factory = require('../index');
-    importer = factory(sequelize.model('Address'), {});
 
+    importer = factory(sequelize.model('Address'), {});
     expect(importer.syncStream).to.be.a('function');
   });
 
@@ -43,14 +43,17 @@ describe(':::: Import Factory ::::', function () {
           fs.createReadStream(path.join(__dirname, '/fixtures/csv/sample.csv')),
           done
         );
+      }, function (err) {
+        done(err);
       });
   });
 });
 
 var _create = function (model) {
+
   return model
           .create({
-            id: 20003562,
+            id: 206351200,
             cityName: 'Bruxelles',
             streetName: 'Grand Rue',
             postCode: 1000

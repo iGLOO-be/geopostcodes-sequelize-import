@@ -1,8 +1,8 @@
+'use strict';
 var csv = require('csv');
 var q = require('q');
 
 module.exports = function importerFactory (sequelizeDAO) {
-
   var data = [];
 
   return {
@@ -14,6 +14,7 @@ module.exports = function importerFactory (sequelizeDAO) {
           columns: true
         }))
         .pipe(csv.transform(function (record) {
+
           return {
             id: record.id,
             city: record.region3,
@@ -27,9 +28,9 @@ module.exports = function importerFactory (sequelizeDAO) {
         .on('end', function () {
           q.all(_createAll(sequelizeDAO, data))
             .then(function () {
-              return done();
+              done();
             }, function (err) {
-              return done(err);
+              done(err);
             });
         });
     }
@@ -37,6 +38,7 @@ module.exports = function importerFactory (sequelizeDAO) {
 };
 
 var _create = function (sequelizeDAO, jsonData) {
+
   return sequelizeDAO
           .upsert({
             id: jsonData.id,
