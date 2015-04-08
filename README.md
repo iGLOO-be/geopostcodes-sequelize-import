@@ -1,8 +1,7 @@
 # geoposition-import
 
-
-
-[![build status](https://secure.travis-ci.org/Natsuke/geoposition-import.png)](http://travis-ci.org/Natsuke/geoposition-import)
+Module for importing geopostcodes from csv files and put them into database.
+The csv file convention can be retrieve here : [geopostcode](http://www.geopostcodes.com/?lang=fr)
 
 ## Installation
 
@@ -15,5 +14,9 @@ $ npm install geoposition-import
 ## Example Usage
 
 ``` js
+var Sequelize = require('sequelize');
 var geopositionImport = require('geoposition-import');
+
+var sequelize = new Sequelize(databse, user, password);
+// TODO
 ```
