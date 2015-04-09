@@ -8,7 +8,9 @@ module.exports = function importerFactory (sequelizeDAO) {
 
   return {
     syncStream: function (stream, done) {
-      var data = [];
+      var promises = [];
+      var crud = sequelizeCRUD(sequelizeDAO);
+      var ids = [];
 
       stream
         .pipe(csv.parse({
@@ -17,7 +19,6 @@ module.exports = function importerFactory (sequelizeDAO) {
           columns: true
         }))
         .pipe(csv.transform(function (record) {
-
           return {
             id: record.id,
             city: record.region3,
@@ -26,10 +27,12 @@ module.exports = function importerFactory (sequelizeDAO) {
           }
         }))
         .on('data', function (chunk) {
-          data.push(chunk);
+          ids.push(chunk.id);
+          promises.push(crud.create(chunk));
         })
         .on('end', function () {
-          q.all(sequelizeCRUD(sequelizeDAO, data).createAll())
+          promises.push(crud.destroy(ids))
+          q.all(promises)
             .then(function () {
               done();
             }, function (err) {

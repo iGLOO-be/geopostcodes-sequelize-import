@@ -2,29 +2,22 @@
 'use strict';
 var Sequelize = require('sequelize');
 var fs = require('fs');
+var Q = require('q');
 var path = require('path');
 var chai = require('chai');
 var expect = chai.expect;
 
-var config = require('./fixtures/config');
+var config = require('./supports/config');
 
 describe(':::: Import Factory ::::', function () {
   var sequelize;
 
   before(function () {
-    sequelize = new Sequelize(
-      config.database,
-      config.user,
-      config.password
-    );
-
-    sequelize.import(path.join(__dirname, '../lib/model'));
+    sequelize = require('./supports/start').before(sequelize);
   });
 
   beforeEach(function (done) {
-    sequelize
-      .sync({ force: true })
-      .nodeify(done);
+    require('./supports/start').beforeEach(sequelize, done);
   });
 
   it('Can create importer', function () {
@@ -37,16 +30,23 @@ describe(':::: Import Factory ::::', function () {
   it('Can do import', function (done) {
     var factory = require('../index');
     var importer = factory(sequelize.model('Address'), {});
+    var sync = Q.nbind(importer.syncStream, importer);
     var Address = sequelize.model('Address', {});
 
     _create(Address)
       .then(function () {
-        importer.syncStream(
-          fs.createReadStream(path.join(__dirname, '/fixtures/csv/sample.csv')),
-          done
+        return sync(
+          fs.createReadStream(path.join(__dirname, '/fixtures/csv/sample.csv'))
         );
-      }, function (err) {
-        done(err);
+      })
+      .then(function () {
+        return Address.findAndCount()
+          .then(function (res) {
+            expect(res.count).equal(3); // somes tets
+          });
+      })
+      .then(function () {
+        done();
       });
   });
 });
