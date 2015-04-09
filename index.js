@@ -25,9 +25,9 @@ module.exports = function importerFactory (sequelize) {
           .pipe(csv.transform(function (record) {
             return {
               id: record.id,
-              city: record.region3,
-              street: record.street,
-              postcode: record.postcode
+              cityName: record.region3,
+              streetName: record.street,
+              postCode: record.postcode
             }
           }))
           .on('data', function (chunk) {
