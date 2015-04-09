@@ -22,18 +22,18 @@ describe(':::: Import Factory ::::', function () {
 
   it('Can create importer', function () {
     var factory = require('../index');
-    var importer = factory(sequelize.model('Address'), {});
+    var importer = factory(sequelize);
 
     expect(importer.syncStream).to.be.a('function');
   });
 
   it('Can do import', function (done) {
     var factory = require('../index');
-    var importer = factory(sequelize.model('Address'), {});
+    var importer = factory(sequelize);
     var sync = Q.nbind(importer.syncStream, importer);
     var Address = sequelize.model('Address', {});
 
-    _create(Address)
+    Q.when(_create(Address))
       .then(function () {
         return sync(
           fs.createReadStream(path.join(__dirname, '/fixtures/csv/sample.csv'))
@@ -45,9 +45,7 @@ describe(':::: Import Factory ::::', function () {
             expect(res.count).equal(3); // somes tets
           });
       })
-      .then(function () {
-        done();
-      });
+      .nodeify(done);
   });
 });
 
