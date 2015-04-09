@@ -18,5 +18,15 @@ var Sequelize = require('sequelize');
 var geopositionImport = require('geoposition-import');
 
 var sequelize = new Sequelize(databse, user, password);
-// TODO
+
+  // Some code here
+
+function doSomething (done) {
+  var model = require('path/to/model');
+  var importer = geopositionImport(model);
+  var stream = fs.createReadStream('path/to/csv');
+
+  importer.syncStream(stream, done);
+}
+
 ```
