@@ -1,0 +1,4 @@
+iso;country;language;region1;region2;region3;region4;locality;postcode;suburb;street;range;building;latitude;longitude;elevation;iso2;fips;nuts;hasc;stat;timezone;utc;dst
+BE;Belgium;FR;Région Bruxelles-Capitale;;Bruxelles-Capitale;Anderlecht;Anderlecht;1070;;Allée Clara Clairbert;;;50.824443;4.288595;33;BE-BRU;BE11;BE100;BE.BU.BR;21001;Europe/Brussels;+01:00;+02:00
+BE;Belgium;FR;2021663068;Région Bruxelles-Capitale;;Bruxelles-Capitale;Anderlecht;Anderlecht;1070;;Allée de Flins;;;50.840395;4.323295;33;BE-BRU;BE11;BE100;BE.BU.BR;21001;Europe/Brussels;+01:00;+02:00
+BE;Belgium;FR;2021663324;Région Bruxelles-Capitale;;Bruxelles-Capitale;Anderlecht;Anderlecht;1070;;Allée de la Recherche;;;50.817222;4.269545;33;BE-BRU;BE11;BE100;BE.BU.BR;21001;Europe/Brussels;+01:00;+02:00

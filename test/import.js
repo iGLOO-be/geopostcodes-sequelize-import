@@ -32,7 +32,31 @@ describe(':::: Import Factory ::::', function () {
     expect(importer.syncStream).to.be.a('function');
   });
 
-  // TODO: Test simple import
+  /**
+   * Test Simple import with clean database
+   * Expect final count of Address to be 3
+   */
+
+  it('Can do import', function (done) {
+    var factory = require('../index');
+    var importer = factory(sequelize);
+    var sync = Q.nbind(importer.syncStream, importer);
+    var Address = sequelize.model('Address', {});
+
+  sync(
+    fs.createReadStream(path.join(__dirname, './fixtures/csv/sample.csv'))
+  )
+    .then(function () {
+      return Address.findAndCountAll();
+    })
+    .then(function (res) {
+      expect(res.count).equal(3);
+    })
+    .catch(function (err) {
+      throw err;
+    })
+    .nodeify(done);
+  });
 
   /**
    * Test the importation of csv file while other Address already exist
@@ -59,9 +83,53 @@ describe(':::: Import Factory ::::', function () {
       })
       .nodeify(done);
   });
-});
 
-  // TODO: Test wrong csv stream import
+  /**
+   * Test the importation of wrong csv file
+   * Expect sync to throw Error
+   */
+
+  it('Can\'t import wrong csv', function (done) {
+    var factory = require('../index');
+    var importer = factory(sequelize);
+    var sync = Q.nbind(importer.syncStream, importer);
+    var Address = sequelize.model('Address', {});
+
+    sync(
+      fs.createReadStream(path.join(__dirname, './fixtures/csv/wrong-csv.csv'))
+    )
+    .then(function () {
+      throw new Error('Should not pass');
+    })
+    .catch(function (err) {
+
+    })
+    .nodeify(done);
+  });
+
+  /**
+   * Test the importation of non csv file
+   * Expect syn to throw Error
+   */
+
+  it('Can\'t imports non csv file', function (done) {
+    var factory = require('../index');
+    var importer = factory(sequelize);
+    var sync = Q.nbind(importer.syncStream, importer);
+    var Address = sequelize.model('Address', {});
+
+    sync(
+      fs.createReadStream(path.join(__dirname, './fixtures/csv/fake.txt'))
+    )
+    .then(function () {
+      throw new Error('Should not pass');
+    })
+    .catch(function (err) {
+
+    })
+    .nodeify(done);
+  });
+});
 
 var _create = function (model) {
 
