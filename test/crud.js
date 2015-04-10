@@ -17,6 +17,11 @@ describe(':::: Crud Test ::::', function () {
     require('./supports/start').beforeEach(sequelize, done);
   });
 
+  /**
+   * Test one Address creation
+   * Expect final count of Address to be 1
+   */
+
   it('Can create', function (done) {
     var Address = sequelize.model('Address', {});
     var crud = require('../lib/sequelizeCRUD')(Address);
@@ -34,6 +39,12 @@ describe(':::: Crud Test ::::', function () {
       })
       .nodeify(done);
   });
+
+  /**
+   * Test destroy unused Address
+   * This add a fake Address and destroy all other which doesn't fit address id
+   * Expect final count of Address to be 1
+   */
 
   it('Can destroy', function (done) {
     var Address = sequelize.model('Address', {});
@@ -55,6 +66,12 @@ describe(':::: Crud Test ::::', function () {
       })
       .nodeify(done);
   });
+
+  /**
+   * Test destroy one Address
+   * This add a fake Address and destroy Address which id is not 0
+   * Expect final count of Address to be 0
+   */
 
   it('Can destroy one', function (done) {
     var Address = sequelize.model('Address', {});

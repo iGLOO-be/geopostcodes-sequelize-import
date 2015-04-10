@@ -9,6 +9,13 @@ module.exports = function importerFactory (sequelize) {
   var sequelizeDAO = sequelize.model('Address', {});
 
   return {
+    /**
+     * syncStream() trig a promise
+     * based on the correct execution a transaction
+     *
+     * @params {Stream} stream | Stream which contains csv content
+     * @params {Promise} done | The promise to resolve
+     */
     syncStream: function (stream, done) {
       var promises = [];
       var crud = sequelizeCRUD(sequelizeDAO);

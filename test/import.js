@@ -20,6 +20,11 @@ describe(':::: Import Factory ::::', function () {
     require('./supports/start').beforeEach(sequelize, done);
   });
 
+  /**
+   * Test the creation of geo post code importer
+   * Expect importer to have a function syncStream
+   */
+
   it('Can create importer', function () {
     var factory = require('../index');
     var importer = factory(sequelize);
@@ -27,7 +32,14 @@ describe(':::: Import Factory ::::', function () {
     expect(importer.syncStream).to.be.a('function');
   });
 
-  it('Can do import', function (done) {
+  // TODO: Test simple import
+
+  /**
+   * Test the importation of csv file while other Address already exist
+   * Expect final count of Address to be 3
+   */
+
+  it('Can do import and destroy', function (done) {
     var factory = require('../index');
     var importer = factory(sequelize);
     var sync = Q.nbind(importer.syncStream, importer);
@@ -48,6 +60,8 @@ describe(':::: Import Factory ::::', function () {
       .nodeify(done);
   });
 });
+
+  // TODO: Test wrong csv stream import
 
 var _create = function (model) {
 
