@@ -16,9 +16,9 @@ describe(':::: Import Factory ::::', function () {
     sequelize = require('./supports/start').before(sequelize);
   });
 
-  beforeEach(function (done) {
-    require('./supports/start').beforeEach(sequelize, done);
-  });
+  // beforeEach(function (done) {
+  //   require('./supports/start').beforeEach(sequelize, done);
+  // });
 
   /**
    * Test the creation of geo post code importer
@@ -38,24 +38,26 @@ describe(':::: Import Factory ::::', function () {
    */
 
   it('Can do import', function (done) {
+    this.timeout(1000 * 100);
+
     var factory = require('../index');
     var importer = factory(sequelize);
     var sync = Q.nbind(importer.syncStream, importer);
     var Address = sequelize.model('Address', {});
 
-  sync(
-    fs.createReadStream(path.join(__dirname, './fixtures/csv/sample.csv'))
-  )
-    .then(function () {
-      return Address.findAndCountAll();
-    })
-    .then(function (res) {
-      expect(res.count).equal(3);
-    })
-    .catch(function (err) {
-      throw err;
-    })
-    .nodeify(done);
+    sync(
+      fs.createReadStream(path.join(__dirname, './fixtures/csv/sample.csv'))
+    )
+      .then(function () {
+        return Address.findAndCountAll();
+      })
+      .then(function (res) {
+        expect(res.count).equal(3);
+      })
+      .catch(function (err) {
+        throw err;
+      })
+      .nodeify(done);
   });
 
   /**
@@ -64,12 +66,14 @@ describe(':::: Import Factory ::::', function () {
    */
 
   it('Can do import and destroy', function (done) {
+    this.timeout(1000 * 100);
+
     var factory = require('../index');
     var importer = factory(sequelize);
     var sync = Q.nbind(importer.syncStream, importer);
     var Address = sequelize.model('Address', {});
 
-    Q.when(_create(Address))
+    Q.when(true)
       .then(function () {
         return sync(
           fs.createReadStream(path.join(__dirname, '/fixtures/csv/sample.csv'))
@@ -81,7 +85,10 @@ describe(':::: Import Factory ::::', function () {
             expect(res.count).equal(3); // somes tets
           });
       })
-      .nodeify(done);
+      .nodeify(function (err) {
+        console.log(err);
+        done(err);
+      });
   });
 
   /**

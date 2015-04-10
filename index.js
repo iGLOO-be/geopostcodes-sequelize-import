@@ -1,12 +1,18 @@
 'use strict';
 var csv = require('csv');
 var q = require('q');
+var async = require('async');
+var merge = require('lodash/object/merge');
 
 var sequelizeCRUD = require('./lib/sequelizeCRUD');
 
-module.exports = function importerFactory (sequelize) {
+module.exports = function importerFactory (sequelize, options) {
 
   var sequelizeDAO = sequelize.model('Address', {});
+
+  options = merge({
+    maxBulkCreate: 1000
+  }, options);
 
   return {
     /**
@@ -20,6 +26,16 @@ module.exports = function importerFactory (sequelize) {
       var promises = [];
       var crud = sequelizeCRUD(sequelizeDAO);
       var ids = [];
+
+      var cargo = async.cargo(function (datas, done) {
+        var options = datas[0].transaction;
+        var records = datas.map(function (d) { return d.record });
+
+        options.updateOnDuplicate = true;
+
+        sequelizeDAO.bulkCreate(records, options)
+          .nodeify(done);
+      }, options.maxBulkCreate);
 
       sequelize.transaction()
       .then(function (t) {
@@ -39,22 +55,22 @@ module.exports = function importerFactory (sequelize) {
           }))
           .on('data', function (chunk) {
             ids.push(chunk.id);
-            promises.push(crud.create(chunk, { transaction: t }));
+            cargo.push({ record: chunk, transaction: t });
           })
           .on('end', function () {
-            promises.push(crud.destroy(ids, { transaction: t }));
+            var end = function () {
+              q.when(
+                crud.destroy(ids, { transaction: t })
+              )
+                .then(t.commit.bind(t))
+                .nodeify(done);
+            };
 
-            q.all(promises)
-              .then(function () {
-                return t.commit();
-              })
-              .catch(function (err) {
-                return t.rollback()
-                  .then(function () {
-                    throw err;
-                  });
-              })
-              .nodeify(done);
+            if (cargo.length()) {
+              cargo.drain = end;
+            } else {
+              end()
+            }
           });
       });
     }
