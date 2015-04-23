@@ -9,7 +9,10 @@ module.exports = {
     sequelize = new Sequelize(
       config.database,
       config.user,
-      config.password
+      config.password,
+      {
+        logging: false
+      }
     );
 
     sequelize.import(path.join(__dirname, '../../lib/model'));

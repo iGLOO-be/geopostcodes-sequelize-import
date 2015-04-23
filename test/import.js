@@ -25,7 +25,7 @@ describe(':::: Import Factory ::::', function () {
    * Expect importer to have a function syncStream
    */
 
-  it('Can create importer', function () {
+  it.only('Can create importer', function () {
     var factory = require('../index');
     var importer = factory(sequelize);
 
@@ -37,7 +37,7 @@ describe(':::: Import Factory ::::', function () {
    * Expect final count of Address to be 3
    */
 
-  it('Can do import', function (done) {
+  it.only('Can do import', function (done) {
     this.timeout(1000 * 100);
 
     var factory = require('../index');
@@ -46,13 +46,13 @@ describe(':::: Import Factory ::::', function () {
     var Address = sequelize.model('Address', {});
 
     sync(
-      fs.createReadStream(path.join(__dirname, './fixtures/csv/sample.csv'))
+      fs.createReadStream(path.join(__dirname, './fixtures/csv/light.csv'))
     )
       .then(function () {
-        return Address.findAndCountAll();
+        return Address.count();
       })
       .then(function (res) {
-        expect(res.count).equal(3);
+        expect(res).equal(3);
       })
       .catch(function (err) {
         throw err;
@@ -76,19 +76,16 @@ describe(':::: Import Factory ::::', function () {
     Q.when(true)
       .then(function () {
         return sync(
-          fs.createReadStream(path.join(__dirname, '/fixtures/csv/sample.csv'))
+          fs.createReadStream(path.join(__dirname, '/fixtures/csv/light.csv'))
         );
       })
       .then(function () {
-        return Address.findAndCount()
+        return Address.count()
           .then(function (res) {
-            expect(res.count).equal(3); // somes tets
+            expect(res).equal(3);
           });
       })
-      .nodeify(function (err) {
-        console.log(err);
-        done(err);
-      });
+      .nodeify(done);
   });
 
   /**

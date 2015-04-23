@@ -3,15 +3,20 @@ var csv = require('csv');
 var q = require('q');
 var async = require('async');
 var merge = require('lodash/object/merge');
+var path = require('path');
 
 var sequelizeCRUD = require('./lib/sequelizeCRUD');
 
 module.exports = function importerFactory (sequelize, options) {
 
+  sequelize.import(path.join(__dirname, 'lib/model'));
   var sequelizeDAO = sequelize.model('Address', {});
 
   options = merge({
-    maxBulkCreate: 1000
+    maxBulkCreate: 500,
+
+    // Does not work on SQLLite
+    updateOnDuplicate: false
   }, options);
 
   return {
@@ -23,6 +28,9 @@ module.exports = function importerFactory (sequelize, options) {
      * @params {Promise} done | The promise to resolve
      */
     syncStream: function (stream, done) {
+      sequelize.sync({
+        force: true
+      });
       var promises = [];
       var crud = sequelizeCRUD(sequelizeDAO);
       var ids = [];
@@ -30,8 +38,6 @@ module.exports = function importerFactory (sequelize, options) {
       var cargo = async.cargo(function (datas, done) {
         var options = datas[0].transaction;
         var records = datas.map(function (d) { return d.record });
-
-        options.updateOnDuplicate = true;
 
         sequelizeDAO.bulkCreate(records, options)
           .nodeify(done);
@@ -46,9 +52,11 @@ module.exports = function importerFactory (sequelize, options) {
             columns: true
           }))
           .pipe(csv.transform(function (record) {
+            var id = record.language + '-' + record.id
             return {
-              id: record.id,
-              cityName: record.region3,
+              id: id,
+              language: record.language,
+              cityName: record.locality,
               streetName: record.street,
               postCode: record.postcode
             }
