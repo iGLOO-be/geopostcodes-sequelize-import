@@ -1,20 +1,23 @@
 {
-  "name": "geoposition-import",
+  "name": "geopostcodes-sequelize-import",
   "version": "1.0.0",
-  "description": "",
+  "description": "Import geopostcodes.com CSV into SQL databases with Sequelize.js",
   "main": "index.js",
   "scripts": {
     "test": "node_modules/.bin/grunt ci"
   },
   "repository": {
     "type": "git",
-    "url": "https://gitlab.igloo.be/AndyVanbutsele/geoposition-import"
+    "url": "https://github.com/iGLOO-be/geopostcodes-sequelize-import"
   },
   "keywords": [],
-  "author": "Andy Vanbutsele <andy.vanbutsele@gmail.com>",
+  "author": [
+    "Andy Vanbutsele <andy.vanbutsele@gmail.com>",
+    "iGLOO <dev@igloo.be>"
+  ],
   "license": "BSD-3-Clause",
   "bugs": {
-    "url": "https://gitlab.igloo.be/AndyVanbutsele/geoposition-import/issues"
+    "url": "https://github.com/iGLOO-be/geopostcodes-sequelize-import/issues"
   },
   "dependencies": {
     "csv": "^0.4.1",
