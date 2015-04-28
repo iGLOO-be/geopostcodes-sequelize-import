@@ -19,9 +19,9 @@ describe(':::: MySQL ::::', function () {
     },
     createSequelize: function () {
       return new Sequelize(
-        config.database,
-        config.user,
-        config.password,
+        'geopostcodes-sequelize-import',
+        'root',
+        '',
         {
           logging: false
         }
