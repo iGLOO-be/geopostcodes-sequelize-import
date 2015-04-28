@@ -80,9 +80,8 @@ module.exports = function (options) {
      */
     it('Can import loud', function (done) {
       this.timeout(10 * 1000);
-      var syncStream = Q.nbind(importer.syncStream, importer);
 
-      syncStream(
+      importer.syncStream(
         fs.createReadStream(path.join(__dirname, '../fixtures/csv/sample.csv'))
       )
         .then(expectAddressCount.bind(null, 4999))

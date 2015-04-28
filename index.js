@@ -100,7 +100,7 @@ module.exports = function importerFactory (sequelize, options) {
                     }))
                 )
                   .then(t.commit.bind(t))
-                  .nodeify(done);
+                  .then(defer.resolve.bind(defer));
               };
 
               if (cargo.length()) {

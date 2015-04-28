@@ -7,8 +7,6 @@ var path = require('path');
 var chai = require('chai');
 var expect = chai.expect;
 
-var config = require('./supports/config');
-
 describe(':::: MySQL ::::', function () {
   var sequelize;
 

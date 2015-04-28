@@ -2,7 +2,6 @@
 'use strict';
 
 var Sequelize = require('sequelize');
-var config = require('./supports/config');
 var Q = require('q');
 var path = require('path');
 var fs = require('fs');
@@ -20,7 +19,7 @@ describe(':::: Sqlite3 DB ::::', function () {
     updatePopulated: false,
     createSequelize: function () {
       return new Sequelize(
-        config.database,
+        'geopostcodes-sequelize-import',
         null,
         null,
         {
