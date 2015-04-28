@@ -1,11 +1,8 @@
 # geopostcodes-sequelize-import
 
-Module for importing geopostcodes from csv files and put them into database.
-The csv file convention can be retrieve here : [geopostcode.com](http://www.geopostcodes.com/)
+Import [geopostcode.com](http://www.geopostcodes.com/) streets file into SQL database with [Sequelize](https://github.com/sequelize/sequelize).
 
 ## Installation
-
-This module is installed via npm:
 
 ``` bash
 $ npm install geopostcodes-sequelize-import
@@ -14,17 +11,27 @@ $ npm install geopostcodes-sequelize-import
 ## Example Usage
 
 ``` js
-  var fs = require('fs');
-  var createImporter = require('geopostcodes-sequelize-import');
-  var importer = createImporter(sequelize, {
-    // options
-  });
+var fs = require('fs');
+var importerFactory = require('geopostcodes-sequelize-import');
+var importer = importerFactory(sequelize, {
+  // options
+});
 
-  var csvFilePath = 'path/to/geopostcodes-streets-plus.csv';
-  var csvStream = fs.createReadStream(csvFilePath);
+var csvFilePath = 'path/to/geopostcodes-streets-plus.csv';
+var csvStream = fs.createReadStream(csvFilePath);
 
-  importer.syncStream(csvStream)
-    .on('end', function () {
-      console.log('Sync end!')
-    });
+importer.syncStream(csvStream, function (err) {
+  if (err) {
+    throw err;
+  }
+  console.log('Sync end!');
+});
 ```
+
+## Options
+
+- `maxBulkCreate` : (default: `500`) Maximum records processed per `insert into`.
+- `updateOnDuplicate` : (default: `false`)
+  See [sequelize doc](http://docs.sequelizejs.com/en/latest/api/model/#bulkcreaterecords-options-promisearrayinstance).
+  Only supported by `mysql` & `mariadb`
+  If `false`, duplicate ID errors can be raised if database is already populated.

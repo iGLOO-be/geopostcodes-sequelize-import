@@ -2,6 +2,5 @@
   "laxcomma": true,
   "node": true,
   "strict": true,
-  "camelcase": true,
   "undef": true
 }
