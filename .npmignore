@@ -1,0 +1,7 @@
+*.swp
+.DS_Store
+.tmp
+test
+.jshintrc
+.travis.yml
+Gruntfile.js
