@@ -3,6 +3,6 @@ node_js:
   - "0.12.0"
 
 before_script:
+  - mysql -e 'create database `geopostcodes-sequelize-import`;'
   - npm install -g grunt-cli
   - grunt ci
-  - mysql -e 'create database `geopostcodes-sequelize-import`;'
