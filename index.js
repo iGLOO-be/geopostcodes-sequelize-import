@@ -87,20 +87,18 @@ module.exports = function importerFactory (sequelize, options) {
                     });
                 }
 
-                Q.when(
-                  AddressDAO
-                    .destroy(merge({
-                      where: {
-                        $not: [
-                          { id: ids }
-                        ]
-                      }
-                    }, {
-                      transaction: t
-                    }))
-                )
+                promise = AddressDAO
+                  .destroy({
+                    where: {
+                      $not: [
+                        { id: ids }
+                      ]
+                    },
+                    transaction: t
+                  })
                   .then(t.commit.bind(t))
-                  .then(defer.resolve.bind(defer));
+
+                defer.resolve(promise);
               };
 
               if (cargo.length()) {
