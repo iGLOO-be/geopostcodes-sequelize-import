@@ -1,5 +1,7 @@
 # geopostcodes-sequelize-import
 
+[![Build Status](https://travis-ci.org/iGLOO-be/geopostcodes-sequelize-import.svg?branch=master)](https://travis-ci.org/iGLOO-be/geopostcodes-sequelize-import)
+
 Import [geopostcode.com](http://www.geopostcodes.com/) streets file into SQL database with [Sequelize](https://github.com/sequelize/sequelize).
 
 ## Installation
