@@ -87,7 +87,7 @@ module.exports = function importerFactory (sequelize, options) {
                     });
                 }
 
-                promise = AddressDAO
+                var promise = AddressDAO
                   .destroy({
                     where: {
                       $not: [
