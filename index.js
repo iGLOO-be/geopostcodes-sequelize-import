@@ -34,6 +34,7 @@ module.exports = function importerFactory (sequelize, options) {
       var promises = [];
       var ids = [];
       var defer = Q.defer();
+      var handledCount = 0;
 
       // Async cargo does not care about errors!
       var error = null;
@@ -73,7 +74,9 @@ module.exports = function importerFactory (sequelize, options) {
             .on('data', function (record) {
               if (record) {
                 ids.push(record.id);
-                cargo.push({ record: record, transaction: t });
+                cargo.push({ record: record, transaction: t }, function () {
+                  defer.notify(handledCount++);
+                });
               }
             })
             .on('end', function () {
