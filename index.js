@@ -68,7 +68,8 @@ module.exports = function importerFactory (sequelize, options) {
                 language: record.language,
                 cityName: record.locality,
                 streetName: record.street,
-                postCode: record.postcode
+                postCode: record.postcode,
+                country: record.iso
               };
             }))
             .on('data', function (record) {
